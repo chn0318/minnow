@@ -1,65 +1,73 @@
 #include "byte_stream.hh"
-
 using namespace std;
 
 ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ) {}
 
 bool Writer::is_closed() const
 {
-  // Your code here.
-  return {};
+
+  return closed;
 }
 
 void Writer::push( string data )
 {
   // Your code here.
-  (void)data;
+  uint64_t L = min( data.length(), capacity_ - length );
+  data = data.substr( 0, L );
+  if ( L > 0 ) {
+    buffer += data;
+    length += L;
+    total_push += L;
+  }
+
   return;
 }
 
 void Writer::close()
 {
-  // Your code here.
+  closed = true;
+  return;
 }
 
 uint64_t Writer::available_capacity() const
 {
   // Your code here.
-  return {};
+  return capacity_ - length;
 }
 
 uint64_t Writer::bytes_pushed() const
 {
   // Your code here.
-  return {};
+  return total_push;
 }
 
 bool Reader::is_finished() const
 {
   // Your code here.
-  return {};
+  return closed && length == 0;
 }
 
 uint64_t Reader::bytes_popped() const
 {
   // Your code here.
-  return {};
+  return total_pop;
 }
 
 string_view Reader::peek() const
 {
   // Your code here.
-  return {};
+  return string_view( buffer );
 }
 
 void Reader::pop( uint64_t len )
 {
-  // Your code here.
-  (void)len;
+  buffer.erase( 0, len );
+  length -= len;
+  total_pop += len;
 }
 
 uint64_t Reader::bytes_buffered() const
 {
   // Your code here.
-  return {};
+  return length;
 }
