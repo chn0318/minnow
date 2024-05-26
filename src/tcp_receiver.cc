@@ -11,13 +11,16 @@ void TCPReceiver::receive( TCPSenderMessage message )
     zero_point = message.seqno;
     init = true;
   }
+  if(message.RST){
+    reader().set_error();
+  }
+  
   if (!init)
   {
     return;
   }
   
-  rst = message.RST;
-  
+
   uint64_t absolute_seqno = message.seqno.unwrap(zero_point, writer().bytes_pushed());
   uint64_t sqe_index = absolute_seqno - 1;
   if (message.SYN)
@@ -35,7 +38,7 @@ TCPReceiverMessage TCPReceiver::send() const
   TCPReceiverMessage message;
   if (init)
   {
-    if (reader().is_finished())
+    if (writer().is_closed())
     {
       message.ackno = Wrap32::wrap(writer().bytes_pushed()+2 , zero_point);
     }
@@ -45,7 +48,7 @@ TCPReceiverMessage TCPReceiver::send() const
     
   }
 
-  message.RST = rst;
+  message.RST = reader().has_error();
   message.window_size = UINT16_MAX < writer().available_capacity() ? UINT16_MAX : writer().available_capacity();
   return message;
 }
