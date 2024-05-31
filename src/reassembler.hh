@@ -1,6 +1,7 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include<map>
 class Reassembler
 {
 public:
@@ -41,8 +42,7 @@ public:
 
 private:
   ByteStream output_; // the Reassembler writes to this ByteStream
-  std::string buffer{};
-  std::string mask{};
+  std::map <uint64_t, std::string> window {};
   uint64_t byte_internal{};
   bool meet_last_substring {};
 };
