@@ -10,7 +10,12 @@
 #include <memory>
 #include <optional>
 #include <queue>
-
+class Retransmit_timer{
+public:
+  uint64_t acc;
+  bool alive;
+  Retransmit_timer():acc(0), alive(false){}
+};
 class TCPSender
 {
 public:
@@ -48,4 +53,16 @@ private:
   ByteStream input_;
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+  uint64_t RTO {};
+  Retransmit_timer Timer {};
+  std::queue<TCPSenderMessage> Outstanding {};
+  uint64_t Curr {};
+  uint64_t Window_size {};
+  uint64_t consecutive {};
+  uint64_t seq_number_in_flight {};
+  bool Impossible_ack {};
+  bool Connecting {};
+  bool Send_FIN {};
+  bool Connected {};
+  bool stuck_in_zero_window {};
 };
