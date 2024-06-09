@@ -4,13 +4,13 @@
 #include <iostream>
 #include <span>
 #include <string>
-
+#include "tcp_minnow_socket.hh"
 using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
   Address addr( host, "http" );
-  TCPSocket sock;
+  CS144TCPSocket sock;
   sock.connect( addr );
   string request = "GET " + path
                    + " HTTP/1.1\r\n"
