@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include<unordered_map>
 
 #include "address.hh"
 #include "ethernet_frame.hh"
@@ -81,4 +82,8 @@ private:
 
   // Datagrams that have been received
   std::queue<InternetDatagram> datagrams_received_ {};
+  std::unordered_map<uint32_t, std::pair<EthernetAddress, long int>> IP2Mac {};
+  std::unordered_map<uint32_t, long int> IP2Request {};
+  std::unordered_map<uint32_t, std::vector<InternetDatagram>> IP2DatagramBuffer {};
+
 };
