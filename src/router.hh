@@ -5,11 +5,23 @@
 
 #include "exception.hh"
 #include "network_interface.hh"
+class element
+{
+  public:
+    uint32_t route_prefix;
+    uint8_t prefix_length;
+    std::optional<Address> next_hop;
+    size_t interface_num;
 
+    element(uint32_t _route_prefix, uint8_t _prefix_length, std::optional<Address> _next_hop, size_t _interface_num)
+      :route_prefix(_route_prefix), prefix_length(_prefix_length),next_hop(_next_hop),interface_num(_interface_num){}
+};
+  
 // \brief A router that has multiple network interfaces and
 // performs longest-prefix-match routing between them.
 class Router
 {
+
 public:
   // Add an interface to the router
   // \param[in] interface an already-constructed network interface
@@ -35,4 +47,5 @@ public:
 private:
   // The router's collection of network interfaces
   std::vector<std::shared_ptr<NetworkInterface>> _interfaces {};
+  std::vector<element> router_table{};
 };
